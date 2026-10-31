@@ -33,6 +33,11 @@ describe('resolveVersion', () => {
     expect(resolveVersion('9.x', facts)).toBeNull();
     expect(resolveVersion('not a version', facts)).toBeNull();
   });
+  it('falls back to prerelease when a range matches nothing stable', () => {
+    const f = { ...facts, distTags: {}, versions: [{ version: '0.0.1-security', publishedAt: null, hasInstallScripts: false }] };
+    expect(resolveVersion('*', f)).toBe('0.0.1-security');
+    expect(resolveVersion('^0.0.1', f)).toBe('0.0.1-security');
+  });
 });
 
 describe('suggestSafeVersion', () => {

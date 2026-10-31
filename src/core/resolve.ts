@@ -36,8 +36,12 @@ export function resolveVersion(spec: string | undefined, facts: PackageFacts): s
   }
 
   if (isValidVersion(eco, spec)) return versions.find((v) => compareVersions(eco, v, spec) === 0) ?? null;
-  if (eco === 'npm' && semver.validRange(spec)) return semver.maxSatisfying(versions, spec, { includePrerelease: false });
-  return maxSatisfying(eco, versions, spec);
+  // Prefer stable; if the range only matches prereleases (typical for 0.0.1-security placeholder
+  // versions that npm publishes over removed malware), fall back so the malware rule can see it.
+  if (eco === 'npm' && semver.validRange(spec)) {
+    return semver.maxSatisfying(versions, spec, { includePrerelease: false }) ?? semver.maxSatisfying(versions, spec, { includePrerelease: true });
+  }
+  return maxSatisfying(eco, versions, spec) ?? maxSatisfying(eco, versions, spec, true);
 }
 
 export function ageDays(publishedAt: string | null, now: number): number | null {
