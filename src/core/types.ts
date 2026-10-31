@@ -1,10 +1,13 @@
-export type Ecosystem = 'npm';
+/** OSV ecosystem names, used verbatim in OSV queries. */
+export type Ecosystem = 'npm' | 'PyPI' | 'crates.io' | 'Go';
+export const ECOSYSTEMS: Ecosystem[] = ['npm', 'PyPI', 'crates.io', 'Go'];
+
 export type Action = 'allow' | 'warn' | 'deny';
 
 export interface PackageRef {
   ecosystem: Ecosystem;
   name: string;
-  /** Raw spec as written: "1.2.3", "^1.0.0", "latest", or undefined. */
+  /** Raw spec as written: "1.2.3", "^1.0.0", "latest", "==2.31.0", ">=2,<3", or undefined. */
   spec?: string;
 }
 
@@ -70,6 +73,7 @@ export interface PackageFacts {
   ref: PackageRef;
   exists: boolean;
   versions: VersionFacts[];
+  /** `latest` is the registry's default version for an unqualified install. */
   distTags: Record<string, string>;
   vulns: OsvVuln[];
   sourceErrors: string[];
@@ -78,4 +82,8 @@ export interface PackageFacts {
 export const ACTION_RANK: Record<Action, number> = { allow: 0, warn: 1, deny: 2 };
 export function maxAction(actions: Action[]): Action {
   return actions.reduce<Action>((m, a) => (ACTION_RANK[a] > ACTION_RANK[m] ? a : m), 'allow');
+}
+
+export function refKey(r: PackageRef): string {
+  return `${r.ecosystem}:${r.name}@${r.spec ?? ''}`;
 }
