@@ -16,6 +16,15 @@ interface RegistryDoc {
 const HOUR = 3_600_000;
 const INSTALL_SCRIPTS = ['preinstall', 'install', 'postinstall'];
 
+/** Consume an unused body so no undici stream is left open at process exit (libuv asserts on Windows otherwise). */
+export async function drain(res: Response): Promise<void> {
+  try {
+    await res.arrayBuffer();
+  } catch {
+    // body already closed or unreadable; nothing to release
+  }
+}
+
 export class NpmRegistryClient {
   constructor(
     private baseUrl: string = process.env.GUARDIAN_NPM_REGISTRY ?? 'https://registry.npmjs.org',
@@ -33,11 +42,15 @@ export class NpmRegistryClient {
       signal: AbortSignal.timeout(this.timeoutMs),
     });
     if (res.status === 404) {
+      await drain(res);
       const miss: NpmMetadata = { exists: false, distTags: {}, versions: [] };
       this.cache.set(key, miss, 10 * 60_000);
       return miss;
     }
-    if (!res.ok) throw new Error(`npm registry ${res.status}`);
+    if (!res.ok) {
+      await drain(res);
+      throw new Error(`npm registry ${res.status}`);
+    }
 
     const doc = (await res.json()) as RegistryDoc;
     const versions: VersionFacts[] = Object.entries(doc.versions ?? {}).map(([version, v]) => ({

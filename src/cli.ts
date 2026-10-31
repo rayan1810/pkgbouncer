@@ -101,12 +101,18 @@ async function main(argv: string[]): Promise<number> {
   }
 }
 
+/** Set the exit code and let the event loop drain; a hard exit mid-socket trips a libuv assertion on Windows. */
+function finish(code: number): void {
+  process.exitCode = code;
+  setTimeout(() => process.exit(code), 2000).unref();
+}
+
 main(process.argv.slice(2))
   .then((code) => {
-    if (code >= 0) process.exit(code);
+    if (code >= 0) finish(code);
   })
   .catch((e: Error) => {
     // Hooks must never block an agent because Guardian itself crashed; fail open loudly.
     console.error(`[guardian] error: ${e.message}`);
-    process.exit(process.argv[2] === 'hook' ? 0 : 2);
+    finish(process.argv[2] === 'hook' ? 0 : 2);
   });

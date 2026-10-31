@@ -1,5 +1,6 @@
 import type { OsvVuln } from '../core/types.js';
 import { FileCache } from './cache.js';
+import { drain } from './npm-registry.js';
 
 const HOUR = 3_600_000;
 const BATCH = 1000;
@@ -18,13 +19,19 @@ export class OsvClient {
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(this.timeoutMs),
     });
-    if (!res.ok) throw new Error(`osv ${path} ${res.status}`);
+    if (!res.ok) {
+      await drain(res);
+      throw new Error(`osv ${path} ${res.status}`);
+    }
     return (await res.json()) as T;
   }
 
   private async get<T>(path: string): Promise<T> {
     const res = await fetch(this.baseUrl + path, { signal: AbortSignal.timeout(this.timeoutMs) });
-    if (!res.ok) throw new Error(`osv ${path} ${res.status}`);
+    if (!res.ok) {
+      await drain(res);
+      throw new Error(`osv ${path} ${res.status}`);
+    }
     return (await res.json()) as T;
   }
 
