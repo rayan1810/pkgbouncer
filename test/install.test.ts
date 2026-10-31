@@ -12,7 +12,10 @@ describe('installClaudeCode', () => {
     installClaudeCode(home);
     const s = JSON.parse(readFileSync(p, 'utf8'));
     expect(s.hooks.PreToolUse).toHaveLength(1);
-    expect(s.hooks.PreToolUse[0]).toEqual({ matcher: 'Bash', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] });
+    expect(s.hooks.PostToolUse).toHaveLength(1);
+    const entry = { matcher: 'Bash', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] };
+    expect(s.hooks.PreToolUse[0]).toEqual(entry);
+    expect(s.hooks.PostToolUse[0]).toEqual(entry);
   });
   it('preserves existing settings and hooks', () => {
     const home = mkdtempSync(join(tmpdir(), 'gh-'));

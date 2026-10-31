@@ -31,13 +31,20 @@ function objectAt(obj: Json, key: string): Json {
   return obj[key] as Json;
 }
 
-/** Adds the PreToolUse Bash hook to `~/.claude/settings.json`. Idempotent. Returns the file path. */
+/**
+ * Adds the Bash hook under both PreToolUse (block before install) and
+ * PostToolUse (diff the lockfile after install) in `~/.claude/settings.json`.
+ * Idempotent. Returns the file path.
+ */
 export function installClaudeCode(home: string = homedir()): string {
   const p = join(home, '.claude', 'settings.json');
   const settings = readJson(p);
-  const pre = arrayAt(objectAt(settings, 'hooks'), 'PreToolUse') as { hooks?: { command?: string }[] }[];
-  const present = pre.some((entry) => (entry.hooks ?? []).some((h) => h.command === CLAUDE_HOOK_CMD));
-  if (!present) pre.push({ matcher: 'Bash', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] } as never);
+  const hooks = objectAt(settings, 'hooks');
+  for (const event of ['PreToolUse', 'PostToolUse']) {
+    const list = arrayAt(hooks, event) as { hooks?: { command?: string }[] }[];
+    const present = list.some((entry) => (entry.hooks ?? []).some((h) => h.command === CLAUDE_HOOK_CMD));
+    if (!present) list.push({ matcher: 'Bash', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] } as never);
+  }
   writeJson(p, settings);
   return p;
 }

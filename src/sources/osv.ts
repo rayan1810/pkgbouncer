@@ -1,4 +1,4 @@
-import type { OsvVuln } from '../core/types.js';
+import type { Ecosystem, OsvVuln } from '../core/types.js';
 import { FileCache } from './cache.js';
 import { drain } from './npm-registry.js';
 
@@ -36,7 +36,7 @@ export class OsvClient {
   }
 
   /** All vulns (any version) for a package. */
-  queryPackage(name: string, ecosystem = 'npm'): Promise<OsvVuln[]> {
+  queryPackage(name: string, ecosystem: Ecosystem = 'npm'): Promise<OsvVuln[]> {
     return this.cache.remember(`osv:pkg:${ecosystem}:${name}`, HOUR, async () => {
       const r = await this.post<{ vulns?: OsvVuln[] }>('/v1/query', { package: { name, ecosystem } });
       return r.vulns ?? [];
@@ -48,12 +48,12 @@ export class OsvClient {
   }
 
   /** Per-version batch lookup; returns full vuln records per input, in order. */
-  async queryBatch(refs: { name: string; version: string }[], ecosystem = 'npm'): Promise<OsvVuln[][]> {
+  async queryBatch(refs: { name: string; version: string; ecosystem?: Ecosystem }[]): Promise<OsvVuln[][]> {
     const out: OsvVuln[][] = [];
     for (let i = 0; i < refs.length; i += BATCH) {
       const chunk = refs.slice(i, i + BATCH);
       const r = await this.post<{ results: { vulns?: { id: string }[] }[] }>('/v1/querybatch', {
-        queries: chunk.map((c) => ({ package: { name: c.name, ecosystem }, version: c.version })),
+        queries: chunk.map((c) => ({ package: { name: c.name, ecosystem: c.ecosystem ?? 'npm' }, version: c.version })),
       });
       for (const res of r.results) out.push(await Promise.all((res.vulns ?? []).map((v) => this.getVuln(v.id))));
     }

@@ -1,16 +1,27 @@
 import type { Sources } from '../../src/check.js';
+import type { Ecosystem, OsvVuln } from '../../src/core/types.js';
 
-export const MAL = { id: 'MAL-1', summary: 'stealer', affected: [{ package: { name: 'evil' }, versions: ['1.0.0'] }] };
+export const MAL: OsvVuln = { id: 'MAL-1', summary: 'stealer', affected: [{ package: { name: 'evil' }, versions: ['1.0.0'] }] };
+const PY_MAL: OsvVuln = { id: 'MAL-2', summary: 'py stealer', affected: [{ package: { ecosystem: 'PyPI', name: 'evil-py' }, versions: ['1.0.0'] }] };
 
-/** In-memory sources: `evil@1.0.0` is malware, `nope` does not exist, `flaky` throws, anything else is clean. */
+function vulnsFor(name: string, eco: Ecosystem): OsvVuln[] {
+  if (eco === 'npm' && name === 'evil') return [MAL];
+  if (eco === 'PyPI' && name === 'evil-py') return [PY_MAL];
+  return [];
+}
+
+/**
+ * In-memory sources. `evil@1.0.0` (npm) and `evil-py@1.0.0` (PyPI) are malware,
+ * `nope` does not exist, `flaky` throws, anything else is clean with 0.9.0 and 1.0.0.
+ */
 export const stubSources: Sources = {
   osv: {
-    queryPackage: async (name) => (name === 'evil' ? [MAL] : []),
-    queryBatch: async (refs) => refs.map((r) => (r.name === 'evil' ? [MAL] : [])),
+    queryPackage: async (name, eco) => vulnsFor(name, eco),
+    queryBatch: async (refs) => refs.map((r) => vulnsFor(r.name, r.ecosystem)),
   },
-  npm: {
-    getPackage: async (name) => {
-      if (name === 'nope') return { exists: false, distTags: {}, versions: [] };
+  registry: {
+    getPackage: async ({ name }) => {
+      if (name === 'nope' || name.endsWith('/nope')) return { exists: false, distTags: {}, versions: [] };
       if (name === 'flaky') throw new Error('ECONNRESET');
       return {
         exists: true,
@@ -21,5 +32,6 @@ export const stubSources: Sources = {
         ],
       };
     },
+    getVersionTime: async () => null,
   },
 };
