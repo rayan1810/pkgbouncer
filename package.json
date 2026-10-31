@@ -55,10 +55,10 @@
   "author": "Rohit <rohit@tria.so>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rohit/pkgbouncer.git"
+    "url": "git+https://github.com/rayan1810/pkgbouncer.git"
   },
-  "homepage": "https://github.com/rohit/pkgbouncer#readme",
+  "homepage": "https://github.com/rayan1810/pkgbouncer#readme",
   "bugs": {
-    "url": "https://github.com/rohit/pkgbouncer/issues"
+    "url": "https://github.com/rayan1810/pkgbouncer/issues"
   }
 }
