@@ -16,7 +16,7 @@ describe('checkPackage', () => {
   it('allows clean packages with a one-line summary', async () => {
     const v = await checkPackage({ ecosystem: 'npm', name: 'fine' }, DEFAULT_POLICY, stubSources);
     expect(v.action).toBe('allow');
-    expect(formatVerdict(v)).toBe('[guardian] OK fine@1.0.0');
+    expect(formatVerdict(v)).toBe('[pkgbouncer] OK fine@1.0.0');
   });
   it('collects source errors instead of throwing', async () => {
     const v = await checkPackage({ ecosystem: 'npm', name: 'flaky' }, DEFAULT_POLICY, stubSources);

@@ -7,7 +7,7 @@ const BATCH = 1000;
 
 export class OsvClient {
   constructor(
-    private baseUrl: string = process.env.GUARDIAN_OSV_URL ?? 'https://api.osv.dev',
+    private baseUrl: string = process.env.PKGBOUNCER_OSV_URL ?? 'https://api.osv.dev',
     private cache: FileCache = new FileCache(),
     private timeoutMs = 8000,
   ) {}

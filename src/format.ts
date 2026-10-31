@@ -4,7 +4,7 @@ const LABEL = { allow: 'OK', warn: 'WARN', deny: 'BLOCKED' } as const;
 
 export function formatVerdict(v: Verdict): string {
   const version = v.resolvedVersion ?? v.ref.spec;
-  const head = `[guardian] ${LABEL[v.action]} ${v.ref.name}${version ? '@' + version : ''}`;
+  const head = `[pkgbouncer] ${LABEL[v.action]} ${v.ref.name}${version ? '@' + version : ''}`;
   if (v.findings.length === 0) return head;
   const lines = v.findings.map((f) => `  - (${f.rule}) ${f.message}`);
   if (v.action === 'deny' && v.source !== 'scan') {

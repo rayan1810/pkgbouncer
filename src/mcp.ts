@@ -16,7 +16,7 @@ function normalizeName(eco: Ecosystem, name: string): string {
 }
 
 export function createServer(sources: Sources = defaultSources()): McpServer {
-  const server = new McpServer({ name: 'guardian', version: '0.2.0' });
+  const server = new McpServer({ name: 'pkgbouncer', version: '0.1.0' });
 
   server.tool(
     'check_package',
@@ -43,7 +43,7 @@ export function createServer(sources: Sources = defaultSources()): McpServer {
       if (files.length === 0) return { content: [{ type: 'text', text: `No lockfile found in ${dir}.` }] };
       const refs = dedupeRefs(files.flatMap((f) => parseLockfile(f, readFileSync(f, 'utf8'))));
       const hits = await scanRefs(refs, sources);
-      const text = hits.length ? formatVerdicts(hits) : `[guardian] OK ${refs.length} packages scanned (${files.map((f) => f.replace(/.*[\\/]/, '')).join(', ')}), no known-malicious or critical advisories.`;
+      const text = hits.length ? formatVerdicts(hits) : `[pkgbouncer] OK ${refs.length} packages scanned (${files.map((f) => f.replace(/.*[\\/]/, '')).join(', ')}), no known-malicious or critical advisories.`;
       return { content: [{ type: 'text', text }], isError: hits.some((h) => h.action === 'deny') };
     },
   );

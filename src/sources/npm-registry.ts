@@ -27,7 +27,7 @@ export async function drain(res: Response): Promise<void> {
 
 export class NpmRegistryClient {
   constructor(
-    private baseUrl: string = process.env.GUARDIAN_NPM_REGISTRY ?? 'https://registry.npmjs.org',
+    private baseUrl: string = process.env.PKGBOUNCER_NPM_REGISTRY ?? 'https://registry.npmjs.org',
     private cache: FileCache = new FileCache(),
     private timeoutMs = 8000,
   ) {}

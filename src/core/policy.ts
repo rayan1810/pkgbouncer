@@ -136,13 +136,13 @@ export function evaluate(facts: PackageFacts, policy: Policy, now: number = Date
   return done();
 }
 
-export function guardianHome(): string {
-  return process.env.GUARDIAN_HOME ?? join(homedir(), '.guardian');
+export function pkgbouncerHome(): string {
+  return process.env.PKGBOUNCER_HOME ?? join(homedir(), '.pkgbouncer');
 }
 
-/** Reads `guardian.json` in cwd, else `$GUARDIAN_HOME/policy.json`, else defaults. */
+/** Reads `pkgbouncer.json` in cwd, else `$PKGBOUNCER_HOME/policy.json`, else defaults. */
 export function loadPolicy(cwd: string = process.cwd()): Policy {
-  const candidates = [join(cwd, 'guardian.json'), join(guardianHome(), 'policy.json')];
+  const candidates = [join(cwd, 'pkgbouncer.json'), join(pkgbouncerHome(), 'policy.json')];
   for (const p of candidates) {
     if (!existsSync(p)) continue;
     try {
