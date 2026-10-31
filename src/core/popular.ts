@@ -51,3 +51,56 @@ export const POPULAR_NPM = new Set<string>([
   'eslint-plugin-unused-imports', 'jscodeshift', 'react-codemod', 'keyv', 'cacheable', 'flat-cache',
   'file-entry-cache', 'node-gyp', 'event-stream', 'ua-parser-js', 'coa', 'rc', 'colors.js', 'faker.js',
 ]);
+
+/** Popular PyPI names (PEP 503 normalized). Seed list. */
+export const POPULAR_PYPI = new Set<string>([
+  'requests', 'urllib3', 'numpy', 'pandas', 'scipy', 'matplotlib', 'seaborn', 'scikit-learn', 'torch', 'tensorflow',
+  'keras', 'transformers', 'datasets', 'tokenizers', 'huggingface-hub', 'openai', 'anthropic', 'langchain',
+  'langchain-core', 'llama-index', 'tiktoken', 'pydantic', 'pydantic-core', 'fastapi', 'uvicorn', 'starlette', 'flask',
+  'django', 'djangorestframework', 'sqlalchemy', 'alembic', 'psycopg2', 'psycopg2-binary', 'psycopg', 'pymysql',
+  'mysqlclient', 'pymongo', 'redis', 'celery', 'kombu', 'boto3', 'botocore', 's3transfer', 'awscli',
+  'google-api-python-client', 'google-auth', 'google-cloud-storage', 'azure-storage-blob', 'azure-identity',
+  'httpx', 'aiohttp', 'websockets', 'websocket-client', 'certifi', 'charset-normalizer', 'idna', 'chardet',
+  'beautifulsoup4', 'bs4', 'lxml', 'html5lib', 'selenium', 'playwright', 'scrapy', 'pyyaml', 'toml', 'tomli',
+  'tomli-w', 'jsonschema', 'simplejson', 'orjson', 'ujson', 'msgpack', 'protobuf', 'grpcio', 'click', 'typer',
+  'rich', 'colorama', 'termcolor', 'tqdm', 'loguru', 'structlog', 'python-dotenv', 'dotenv', 'environs',
+  'attrs', 'cattrs', 'dataclasses-json', 'marshmallow', 'cerberus', 'voluptuous', 'pytest', 'pytest-cov',
+  'pytest-asyncio', 'pytest-mock', 'coverage', 'tox', 'nox', 'hypothesis', 'faker', 'mock', 'black', 'ruff',
+  'flake8', 'pylint', 'mypy', 'isort', 'autopep8', 'pycodestyle', 'pyflakes', 'bandit', 'pre-commit',
+  'setuptools', 'wheel', 'pip', 'pipenv', 'poetry', 'virtualenv', 'build', 'twine', 'packaging', 'six',
+  'python-dateutil', 'pytz', 'tzdata', 'arrow', 'pendulum', 'cryptography', 'pycryptodome', 'pyopenssl',
+  'paramiko', 'bcrypt', 'passlib', 'pyjwt', 'python-jose', 'authlib', 'oauthlib', 'requests-oauthlib',
+  'pillow', 'opencv-python', 'imageio', 'scikit-image', 'moviepy', 'pydub', 'pyaudio', 'sounddevice',
+  'jupyter', 'jupyterlab', 'notebook', 'ipython', 'ipykernel', 'nbconvert', 'plotly', 'bokeh', 'dash',
+  'streamlit', 'gradio', 'xgboost', 'lightgbm', 'catboost', 'statsmodels', 'networkx', 'sympy', 'numba',
+  'cython', 'pybind11', 'cffi', 'psutil', 'watchdog', 'schedule', 'apscheduler', 'gunicorn', 'gevent',
+  'eventlet', 'tornado', 'twisted', 'sanic', 'bottle', 'pyramid', 'jinja2', 'markupsafe', 'mako', 'docutils',
+  'sphinx', 'mkdocs', 'markdown', 'pygments', 'tabulate', 'prettytable', 'openpyxl', 'xlrd', 'xlsxwriter',
+  'python-docx', 'pypdf', 'pypdf2', 'reportlab', 'pdfminer-six', 'pytesseract', 'qrcode', 'pyzbar',
+  'discord-py', 'python-telegram-bot', 'slack-sdk', 'tweepy', 'stripe', 'twilio', 'sendgrid', 'pyserial',
+  'pyusb', 'bleak', 'paho-mqtt', 'kafka-python', 'confluent-kafka', 'pika', 'elasticsearch', 'opensearch-py',
+  'cassandra-driver', 'neo4j', 'influxdb-client', 'clickhouse-driver', 'duckdb', 'polars', 'pyarrow',
+  'fastparquet', 'dask', 'ray', 'joblib', 'multiprocess', 'dill', 'cloudpickle', 'typing-extensions',
+  'importlib-metadata', 'zipp', 'filelock', 'platformdirs', 'appdirs', 'distlib', 'pyparsing', 'regex',
+  'colorlog', 'python-multipart', 'email-validator', 'phonenumbers', 'pycountry', 'babel', 'unidecode',
+  'nltk', 'spacy', 'gensim', 'textblob', 'sentencepiece', 'safetensors', 'accelerate', 'peft', 'bitsandbytes',
+]);
+
+/** Popular crates.io names. Seed list. */
+export const POPULAR_CRATES = new Set<string>([
+  'serde', 'serde_json', 'serde_derive', 'tokio', 'tokio-util', 'async-trait', 'futures', 'futures-util',
+  'rand', 'rand_core', 'regex', 'lazy_static', 'once_cell', 'log', 'env_logger', 'tracing', 'tracing-subscriber',
+  'anyhow', 'thiserror', 'clap', 'structopt', 'reqwest', 'hyper', 'http', 'axum', 'actix-web', 'warp', 'rocket',
+  'tower', 'tower-http', 'url', 'uuid', 'chrono', 'time', 'bytes', 'base64', 'hex', 'sha2', 'sha1', 'md5',
+  'hmac', 'ring', 'rustls', 'openssl', 'native-tls', 'libc', 'nix', 'winapi', 'windows', 'windows-sys',
+  'cfg-if', 'bitflags', 'itertools', 'num', 'num-traits', 'num-bigint', 'indexmap', 'hashbrown', 'smallvec',
+  'arrayvec', 'parking_lot', 'crossbeam', 'crossbeam-channel', 'rayon', 'dashmap', 'mio', 'memchr', 'aho-corasick',
+  'byteorder', 'flate2', 'tar', 'zip', 'walkdir', 'glob', 'tempfile', 'dirs', 'home', 'toml', 'yaml-rust',
+  'serde_yaml', 'bincode', 'rmp-serde', 'prost', 'tonic', 'protobuf', 'sqlx', 'diesel', 'rusqlite', 'postgres',
+  'tokio-postgres', 'redis', 'mongodb', 'wasm-bindgen', 'js-sys', 'web-sys', 'yew', 'leptos', 'dioxus',
+  'bevy', 'wgpu', 'winit', 'image', 'png', 'syn', 'quote', 'proc-macro2', 'proc-macro-error', 'darling',
+  'strum', 'derive_more', 'semver', 'unicode-segmentation', 'unicode-width', 'percent-encoding', 'mime'
+,  'rustc-serialize', 'nom', 'pest', 'colored', 'termcolor', 'indicatif', 'console', 'dialoguer', 'crossterm', 'ratatui',
+  'criterion', 'proptest', 'quickcheck', 'mockall', 'pretty_assertions', 'pin-project', 'pin-project-lite',
+  'async-std', 'smol', 'socket2', 'zeroize', 'rustc_version', 'cc', 'pkg-config', 'bindgen', 'cbindgen', 'libloading',
+]);

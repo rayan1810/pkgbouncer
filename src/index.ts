@@ -1,7 +1,10 @@
 export * from './core/types.js';
 export { checkPackage, scanRefs, defaultSources, gatherFacts, type Sources } from './check.js';
 export { evaluate, loadPolicy, matchesList } from './core/policy.js';
-export { parseInstallCommand, splitNameSpec } from './core/parse-command.js';
-export { findLockfile, parseLockfile } from './core/lockfile.js';
+export { parseInstallCommand, detectBareInstall, projectDirFromCommand, splitNameSpec, normalizePyPiName } from './core/parse-command.js';
+export { findLockfile, findLockfiles, parseLockfile, dedupeRefs } from './core/lockfile.js';
+export { compareVersions, satisfies, isValidVersion, isPrerelease } from './core/versions.js';
 export { formatVerdict, formatVerdicts } from './format.js';
-export { runGate } from './hooks/run-gate.js';
+export { runGate, runPostGate } from './hooks/run-gate.js';
+export { RegistryClient } from './sources/registry.js';
+export { OsvClient } from './sources/osv.js';

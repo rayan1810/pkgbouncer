@@ -7,7 +7,7 @@ export function formatVerdict(v: Verdict): string {
   const head = `[guardian] ${LABEL[v.action]} ${v.ref.name}${version ? '@' + version : ''}`;
   if (v.findings.length === 0) return head;
   const lines = v.findings.map((f) => `  - (${f.rule}) ${f.message}`);
-  if (v.action === 'deny') {
+  if (v.action === 'deny' && v.source !== 'scan') {
     if (v.safeVersion) lines.push(`  -> Suggested safe version: ${v.ref.name}@${v.safeVersion}`);
     else if (v.findings.some((f) => f.rule !== 'nonexistent')) lines.push('  -> No safe version found; pick a different package.');
   }

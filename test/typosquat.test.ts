@@ -20,4 +20,10 @@ describe('typosquat', () => {
     expect(findTyposquatTarget('qs')).toBeNull();
     expect(findTyposquatTarget('ws2')).toBeNull();
   });
+  it('uses per-ecosystem lists', () => {
+    expect(findTyposquatTarget('reqeusts', 'PyPI')).toBe('requests');
+    expect(findTyposquatTarget('requests', 'PyPI')).toBeNull();
+    expect(findTyposquatTarget('serde-json', 'crates.io')).toBe('serde_json');
+    expect(findTyposquatTarget('github.com/x/y', 'Go')).toBeNull();
+  });
 });

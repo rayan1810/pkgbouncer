@@ -1,4 +1,5 @@
-import { POPULAR_NPM } from './popular.js';
+import { POPULAR_NPM, POPULAR_PYPI, POPULAR_CRATES } from './popular.js';
+import type { Ecosystem } from './types.js';
 
 /** Optimal string alignment distance (Damerau-Levenshtein with adjacent transpositions). */
 export function damerauLevenshtein(a: string, b: string): number {
@@ -27,12 +28,19 @@ function normalize(name: string): string {
   return name.toLowerCase().replace(/[-_.]/g, '');
 }
 
+export function popularFor(eco: Ecosystem): Set<string> | null {
+  if (eco === 'npm') return POPULAR_NPM;
+  if (eco === 'PyPI') return POPULAR_PYPI;
+  if (eco === 'crates.io') return POPULAR_CRATES;
+  return null; // Go module paths are too long and structured for edit distance to mean anything
+}
+
 /**
  * Returns the popular package this name looks like a typo of, or null.
  * Separator-only differences (crossenv vs cross-env) count as distance 1.
  */
-export function findTyposquatTarget(name: string, popular: Set<string> = POPULAR_NPM): string | null {
-  if (popular.has(name)) return null;
+export function findTyposquatTarget(name: string, eco: Ecosystem = 'npm', popular: Set<string> | null = popularFor(eco)): string | null {
+  if (!popular || popular.has(name)) return null;
   const bare = stripScope(name);
   if (bare.length < 4) return null;
   const maxDist = bare.length <= 6 ? 1 : 2;

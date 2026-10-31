@@ -1,0 +1,6 @@
+# pinned
+requests==2.31.0  # http
+Flask[async]==3.0.0
+numpy>=1.26
+-r other.txt
+pandas==2.2.0; python_version >= "3.9"

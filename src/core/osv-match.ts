@@ -1,21 +1,22 @@
-import semver from 'semver';
-import type { OsvVuln, Severity } from './types.js';
+import type { Ecosystem, OsvVuln, Severity } from './types.js';
+import { compareVersions, isValidVersion, normalizeVersion } from './versions.js';
 
 export function isMalware(v: OsvVuln): boolean {
   return v.id.startsWith('MAL-') || (v.aliases ?? []).some((a) => a.startsWith('MAL-'));
 }
 
-function gte(a: string, b: string): boolean {
-  return semver.valid(b) ? semver.gte(a, b) : true;
+function sameVersion(eco: Ecosystem, a: string, b: string): boolean {
+  if (a === b) return true;
+  return isValidVersion(eco, a) && isValidVersion(eco, b) && compareVersions(eco, a, b) === 0;
 }
 
 /** True if the OSV record lists `name@version` as affected (explicit versions or SEMVER/ECOSYSTEM ranges). */
-export function vulnAffectsVersion(v: OsvVuln, name: string, version: string): boolean {
-  const ver = semver.valid(version) ?? semver.coerce(version, { includePrerelease: true })?.version ?? version;
-  if (!semver.valid(ver)) return false;
+export function vulnAffectsVersion(v: OsvVuln, name: string, version: string, eco: Ecosystem = 'npm'): boolean {
+  if (!isValidVersion(eco, version)) return false;
+  const cmp = (a: string, b: string) => compareVersions(eco, a, b);
   for (const a of v.affected ?? []) {
-    if (a.package?.name && a.package.name !== name) continue;
-    if (a.versions?.includes(version)) return true;
+    if (a.package?.name && normalizeName(eco, a.package.name) !== normalizeName(eco, name)) continue;
+    if (a.versions?.some((x) => sameVersion(eco, x, version))) return true;
     for (const r of a.ranges ?? []) {
       if (r.type !== 'SEMVER' && r.type !== 'ECOSYSTEM') continue;
       let introduced: string | null = null;
@@ -26,19 +27,25 @@ export function vulnAffectsVersion(v: OsvVuln, name: string, version: string): b
           open = true;
           continue;
         }
-        const lowerOk = !open ? false : introduced === '0' || introduced === null ? true : gte(ver, introduced);
+        const lowerOk = open && (introduced === '0' || introduced === null || !isValidVersion(eco, introduced) || cmp(version, introduced) >= 0);
         if (e.fixed !== undefined) {
-          if (lowerOk && semver.valid(e.fixed) && semver.lt(ver, e.fixed)) return true;
+          if (lowerOk && isValidVersion(eco, e.fixed) && cmp(version, e.fixed) < 0) return true;
           open = false;
         } else if (e.last_affected !== undefined) {
-          if (lowerOk && semver.valid(e.last_affected) && semver.lte(ver, e.last_affected)) return true;
+          if (lowerOk && isValidVersion(eco, e.last_affected) && cmp(version, e.last_affected) <= 0) return true;
           open = false;
         }
       }
-      if (open && (introduced === '0' || introduced === null || gte(ver, introduced))) return true;
+      if (open && (introduced === '0' || introduced === null || !isValidVersion(eco, introduced) || cmp(version, introduced) >= 0)) return true;
     }
   }
   return false;
+}
+
+function normalizeName(eco: Ecosystem, name: string): string {
+  if (eco === 'PyPI') return name.toLowerCase().replace(/[-_.]+/g, '-');
+  if (eco === 'crates.io') return name.toLowerCase().replace(/_/g, '-');
+  return name;
 }
 
 export function vulnSeverity(v: OsvVuln): Severity {
@@ -57,3 +64,5 @@ export function vulnSeverity(v: OsvVuln): Severity {
   }
   return 'UNKNOWN';
 }
+
+export { normalizeVersion };
