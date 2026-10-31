@@ -81,14 +81,14 @@ describe('matchesList', () => {
 });
 
 describe('loadPolicy', () => {
-  it('merges guardian.json over defaults', () => {
+  it('merges pkgbouncer.json over defaults', () => {
     const dir = mkdtempSync(join(tmpdir(), 'gpol-'));
-    writeFileSync(join(dir, 'guardian.json'), JSON.stringify({ minAgeDays: 7, deny: ['evil'] }));
+    writeFileSync(join(dir, 'pkgbouncer.json'), JSON.stringify({ minAgeDays: 7, deny: ['evil'] }));
     expect(loadPolicy(dir)).toEqual({ ...DEFAULT_POLICY, minAgeDays: 7, deny: ['evil'] });
   });
   it('returns defaults when nothing is configured', () => {
     const dir = mkdtempSync(join(tmpdir(), 'gpol-'));
-    process.env.GUARDIAN_HOME = mkdtempSync(join(tmpdir(), 'ghome-'));
+    process.env.PKGBOUNCER_HOME = mkdtempSync(join(tmpdir(), 'ghome-'));
     expect(loadPolicy(dir)).toEqual(DEFAULT_POLICY);
   });
 });

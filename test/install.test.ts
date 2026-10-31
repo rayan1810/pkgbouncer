@@ -17,6 +17,15 @@ describe('installClaudeCode', () => {
     expect(s.hooks.PreToolUse[0]).toEqual(entry);
     expect(s.hooks.PostToolUse[0]).toEqual(entry);
   });
+  it('rewrites legacy guardian hook commands', () => {
+    const home = mkdtempSync(join(tmpdir(), 'gh-'));
+    mkdirSync(join(home, '.claude'));
+    writeFileSync(join(home, '.claude', 'settings.json'), JSON.stringify({ hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: 'guardian hook claude-code', timeout: 30 }] }] } }));
+    installClaudeCode(home);
+    const s = JSON.parse(readFileSync(join(home, '.claude', 'settings.json'), 'utf8'));
+    expect(s.hooks.PreToolUse).toHaveLength(1);
+    expect(s.hooks.PreToolUse[0].hooks[0].command).toBe(CLAUDE_HOOK_CMD);
+  });
   it('upgrades an older Bash-only entry to cover PowerShell', () => {
     const home = mkdtempSync(join(tmpdir(), 'gh-'));
     mkdirSync(join(home, '.claude'));

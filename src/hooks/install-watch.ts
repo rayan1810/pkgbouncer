@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { dedupeRefs, findLockfiles, parseLockfile } from '../core/lockfile.js';
-import { guardianHome } from '../core/policy.js';
+import { pkgbouncerHome } from '../core/policy.js';
 import { refKey, type PackageRef } from '../core/types.js';
 import { satisfies } from '../core/versions.js';
 
@@ -13,7 +13,7 @@ import { satisfies } from '../core/versions.js';
  */
 
 function snapshotPath(dir: string): string {
-  const d = join(guardianHome(), 'snapshots');
+  const d = join(pkgbouncerHome(), 'snapshots');
   mkdirSync(d, { recursive: true });
   return join(d, createHash('sha1').update(dir.toLowerCase()).digest('hex') + '.json');
 }

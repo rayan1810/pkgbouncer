@@ -1,17 +1,18 @@
 {
-  "name": "guardian-mcp",
+  "name": "pkgbouncer",
   "version": "0.1.0",
-  "description": "Agent-native dependency install gate: blocks malicious, hallucinated and risky npm packages before Claude Code, Cursor or any AI agent installs them.",
+  "description": "Install gate for AI coding agents: blocks malicious, hallucinated, typosquatted and risky packages (npm, PyPI, crates.io, Go) before Claude Code or any agent installs them. Hooks + MCP server.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "guardian": "./dist/cli.js"
+    "pkgbouncer": "./dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=20"
@@ -33,5 +34,31 @@
     "@types/semver": "^7.5.8",
     "typescript": "^5.6.0",
     "vitest": "^5.0.5"
+  },
+  "keywords": [
+    "supply-chain",
+    "security",
+    "malware",
+    "mcp",
+    "claude-code",
+    "cursor",
+    "npm",
+    "pypi",
+    "cargo",
+    "go",
+    "osv",
+    "typosquat",
+    "slopsquatting",
+    "hooks",
+    "install-gate"
+  ],
+  "author": "Rohit <rohit@tria.so>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohit/pkgbouncer.git"
+  },
+  "homepage": "https://github.com/rohit/pkgbouncer#readme",
+  "bugs": {
+    "url": "https://github.com/rohit/pkgbouncer/issues"
   }
 }

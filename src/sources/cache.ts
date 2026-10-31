@@ -1,10 +1,10 @@
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { guardianHome } from '../core/policy.js';
+import { pkgbouncerHome } from '../core/policy.js';
 
 export function defaultCacheDir(): string {
-  return process.env.GUARDIAN_CACHE_DIR ?? join(guardianHome(), 'cache');
+  return process.env.PKGBOUNCER_CACHE_DIR ?? join(pkgbouncerHome(), 'cache');
 }
 
 /** Tiny JSON file cache with per-entry TTL. One file per key. */

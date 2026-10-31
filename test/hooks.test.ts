@@ -13,7 +13,7 @@ const P = DEFAULT_POLICY;
 const quiet = { noSnapshot: true };
 
 beforeEach(() => {
-  process.env.GUARDIAN_HOME = mkdtempSync(join(tmpdir(), 'ghome-'));
+  process.env.PKGBOUNCER_HOME = mkdtempSync(join(tmpdir(), 'ghome-'));
 });
 
 function project(pkg: object, lock?: object): string {

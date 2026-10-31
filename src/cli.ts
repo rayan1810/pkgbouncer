@@ -12,18 +12,18 @@ import { cursorHook, type CursorHookInput } from './hooks/cursor.js';
 import { readStdinJson } from './hooks/run-gate.js';
 import { installClaudeCode, installCursor } from './install.js';
 
-const USAGE = `guardian - agent-native dependency install gate
+const USAGE = `pkgbouncer - agent-native dependency install gate
 
-  guardian check <pkg>[@version]...    check packages (exit 1 if any is blocked)
-      prefixes: npm: (default) pypi: crates: go:    e.g. guardian check pypi:requests crates:serde@1
+  pkgbouncer check <pkg>[@version]...    check packages (exit 1 if any is blocked)
+      prefixes: npm: (default) pypi: crates: go:    e.g. pkgbouncer check pypi:requests crates:serde@1
       or --ecosystem npm|PyPI|crates.io|Go for all args
-  guardian scan [dir]                  scan every lockfile in dir for known-malicious / critical advisories
-  guardian install claude-code|cursor  add the pre/post-install hooks to the agent's settings
-  guardian hook claude-code|cursor     (used by the hook) read the tool call on stdin and gate it
-  guardian mcp                         run the MCP server on stdio
+  pkgbouncer scan [dir]                  scan every lockfile in dir for known-malicious / critical advisories
+  pkgbouncer install claude-code|cursor  add the pre/post-install hooks to the agent's settings
+  pkgbouncer hook claude-code|cursor     (used by the hook) read the tool call on stdin and gate it
+  pkgbouncer mcp                         run the MCP server on stdio
   --json                               machine-readable output for check/scan
 
-Policy: guardian.json in the project root, else $GUARDIAN_HOME/policy.json (~/.guardian/policy.json).
+Policy: pkgbouncer.json in the project root, else $PKGBOUNCER_HOME/policy.json (~/.pkgbouncer/policy.json).
 `;
 
 const PREFIX: Record<string, Ecosystem> = { npm: 'npm', pypi: 'PyPI', pip: 'PyPI', crates: 'crates.io', cargo: 'crates.io', go: 'Go' };
@@ -91,16 +91,16 @@ async function main(argv: string[]): Promise<number> {
       }
       const hits = await scanRefs(refs);
       if (json) console.log(JSON.stringify({ lockfiles: files, scanned: refs.length, hits }, null, 2));
-      else console.log(hits.length ? formatVerdicts(hits) : `[guardian] OK ${refs.length} packages scanned (${files.map((f) => f.replace(/.*[\\/]/, '')).join(', ')}), no known-malicious or critical advisories.`);
+      else console.log(hits.length ? formatVerdicts(hits) : `[pkgbouncer] OK ${refs.length} packages scanned (${files.map((f) => f.replace(/.*[\\/]/, '')).join(', ')}), no known-malicious or critical advisories.`);
       return hits.some((h) => h.action === 'deny') ? 1 : 0;
     }
     case 'install': {
       if (rest[0] === 'claude-code') {
-        console.log(`Guardian hooks added to ${installClaudeCode()}. New Claude Code sessions will gate package installs and diff the lockfile afterwards.`);
+        console.log(`pkgbouncer hooks added to ${installClaudeCode()}. New Claude Code sessions will gate package installs and diff the lockfile afterwards.`);
         return 0;
       }
       if (rest[0] === 'cursor') {
-        console.log(`Guardian hook added to ${installCursor()}. Restart Cursor to activate.`);
+        console.log(`pkgbouncer hook added to ${installCursor()}. Restart Cursor to activate.`);
         return 0;
       }
       console.error(USAGE);
@@ -150,7 +150,7 @@ main(process.argv.slice(2))
     if (code >= 0) finish(code);
   })
   .catch((e: Error) => {
-    // Hooks must never block an agent because Guardian itself crashed; fail open loudly.
-    console.error(`[guardian] error: ${e.message}`);
+    // Hooks must never block an agent because pkgbouncer itself crashed; fail open loudly.
+    console.error(`[pkgbouncer] error: ${e.message}`);
     finish(process.argv[2] === 'hook' ? 0 : 2);
   });

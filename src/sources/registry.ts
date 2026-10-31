@@ -6,7 +6,7 @@ export type RegistryMetadata = NpmMetadata;
 
 const HOUR = 3_600_000;
 const MISS_TTL = 10 * 60_000;
-const USER_AGENT = 'guardian-mcp/0.1 (+https://github.com/rohit/guardian-mcp)';
+const USER_AGENT = 'pkgbouncer/0.1 (+https://github.com/rohit/pkgbouncer)';
 
 /**
  * One facade over the four package registries. Each returns the same shape:
@@ -26,9 +26,9 @@ export class RegistryClient {
   private base(eco: Ecosystem): string {
     const env: Record<Ecosystem, string | undefined> = {
       npm: undefined,
-      PyPI: process.env.GUARDIAN_PYPI_URL,
-      'crates.io': process.env.GUARDIAN_CRATES_URL,
-      Go: process.env.GUARDIAN_GOPROXY_URL,
+      PyPI: process.env.PKGBOUNCER_PYPI_URL,
+      'crates.io': process.env.PKGBOUNCER_CRATES_URL,
+      Go: process.env.PKGBOUNCER_GOPROXY_URL,
     };
     const defaults: Record<Ecosystem, string> = { npm: '', PyPI: 'https://pypi.org', 'crates.io': 'https://crates.io', Go: 'https://proxy.golang.org' };
     return (this.urls[eco] ?? env[eco] ?? defaults[eco]).replace(/\/$/, '');

@@ -45,8 +45,8 @@ export async function runGate(command: string, policy: Policy, sources: Sources 
   const flagged = verdicts.filter((v) => v.findings.length > 0);
   const action = maxAction(verdicts.map((v) => v.action));
   let text = flagged.length ? formatVerdicts(flagged) : '';
-  if (flagged.length && pendingCount) text = `[guardian] ${pendingCount} package.json dependenc${pendingCount === 1 ? 'y is' : 'ies are'} not yet in the lockfile; checked before install.\n` + text;
-  if (action === 'deny') text += '\nInstall blocked by Guardian. Use the suggested safe version or a different package, then retry.';
+  if (flagged.length && pendingCount) text = `[pkgbouncer] ${pendingCount} package.json dependenc${pendingCount === 1 ? 'y is' : 'ies are'} not yet in the lockfile; checked before install.\n` + text;
+  if (action === 'deny') text += '\nInstall blocked by pkgbouncer. Use the suggested safe version or a different package, then retry.';
   return { action, text, verdicts };
 }
 
@@ -68,9 +68,9 @@ export async function runPostGate(command: string, _policy: Policy, sources: Sou
 
   const action = maxAction(hits.map((h) => h.action));
   const names = hits.map((h) => `${h.ref.name}@${h.ref.spec}`).join(', ');
-  let text = `[guardian] The install added ${added.length} package(s); ${hits.length} flagged:\n` + formatVerdicts(hits);
+  let text = `[pkgbouncer] The install added ${added.length} package(s); ${hits.length} flagged:\n` + formatVerdicts(hits);
   if (action === 'deny') {
-    text += `\nThese came in as dependencies and are now in the lockfile. Remove or pin them before continuing (e.g. uninstall the package that pulled in ${names}, or add an override to a safe version), then rerun guardian scan.`;
+    text += `\nThese came in as dependencies and are now in the lockfile. Remove or pin them before continuing (e.g. uninstall the package that pulled in ${names}, or add an override to a safe version), then rerun pkgbouncer scan.`;
   }
   return { action, text, verdicts: hits };
 }

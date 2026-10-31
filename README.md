@@ -1,20 +1,20 @@
 <img src="assets/icon.svg" width="64" height="64" alt="">
 
-# Guardian MCP
+# pkgbouncer MCP
 
-**An install gate for AI coding agents.** Guardian sits between Claude Code (or any MCP-capable agent) and the package registries. Before a package is installed it checks the name and version against public malware and advisory feeds and blocks the install if the package is known-malicious, does not exist (hallucinated or slopsquatted), or looks like a typo of a popular package. It warns on releases younger than a few days, high-severity advisories, and install scripts. After an install it diffs the lockfile and flags anything risky that came in transitively. When it blocks, it tells the agent which version is safe so the agent can self-correct.
+**An install gate for AI coding agents.** pkgbouncer sits between Claude Code (or any MCP-capable agent) and the package registries. Before a package is installed it checks the name and version against public malware and advisory feeds and blocks the install if the package is known-malicious, does not exist (hallucinated or slopsquatted), or looks like a typo of a popular package. It warns on releases younger than a few days, high-severity advisories, and install scripts. After an install it diffs the lockfile and flags anything risky that came in transitively. When it blocks, it tells the agent which version is safe so the agent can self-correct.
 
 Covers **npm, PyPI, crates.io, and Go**.
 
-Tools like Socket, Aikido Safe Chain, and Dependabot protect a human typing `npm install`. Guardian protects the shell command an agent runs on your behalf.
+Tools like Socket, Aikido Safe Chain, and Dependabot protect a human typing `npm install`. pkgbouncer protects the shell command an agent runs on your behalf.
 
 ## 30-second install
 
 ```bash
-npm install -g guardian-mcp
+npm install -g pkgbouncer
 
 # Claude Code: adds PreToolUse + PostToolUse hooks on Bash and PowerShell to ~/.claude/settings.json
-guardian install claude-code
+pkgbouncer install claude-code
 ```
 
 From then on, in every new Claude Code session:
@@ -26,14 +26,14 @@ From then on, in every new Claude Code session:
 Example of what the agent sees:
 
 ```
-[guardian] BLOCKED lodahs@0.0.1-security
+[pkgbouncer] BLOCKED lodahs@0.0.1-security
   - (known-malicious) lodahs@0.0.1-security is a known malicious package (MAL-2025-25502: Malicious code in lodahs (npm)).
   - (typosquat) lodahs looks like a typo of the popular package "lodash". Confirm you meant lodahs.
   -> No safe version found; pick a different package.
-Install blocked by Guardian. Use the suggested safe version or a different package, then retry.
+Install blocked by pkgbouncer. Use the suggested safe version or a different package, then retry.
 ```
 
-Cursor: `guardian install cursor` writes a `beforeShellExecution` hook following Cursor's documented format. It has not been verified against a live Cursor install yet.
+Cursor: `pkgbouncer install cursor` writes a `beforeShellExecution` hook following Cursor's documented format. It has not been verified against a live Cursor install yet.
 
 ## MCP server
 
@@ -42,13 +42,13 @@ The same checks are exposed as MCP tools so an agent can ask before it edits a m
 Claude Code:
 
 ```bash
-claude mcp add guardian -- guardian mcp
+claude mcp add pkgbouncer -- pkgbouncer mcp
 ```
 
 Cursor (`~/.cursor/mcp.json` or `.cursor/mcp.json`):
 
 ```json
-{ "mcpServers": { "guardian": { "command": "guardian", "args": ["mcp"] } } }
+{ "mcpServers": { "pkgbouncer": { "command": "pkgbouncer", "args": ["mcp"] } } }
 ```
 
 | Tool | Purpose |
@@ -60,11 +60,11 @@ Cursor (`~/.cursor/mcp.json` or `.cursor/mcp.json`):
 ## CLI
 
 ```bash
-guardian check lodash react@18 @types/node        # npm by default; exit 1 if any is blocked
-guardian check pypi:requests==2.31.0 crates:serde@1 go:github.com/gin-gonic/gin@v1.9.1
-guardian check --ecosystem PyPI requests numpy
-guardian check --json axios                        # machine-readable verdicts
-guardian scan ./my-project                         # all lockfiles in the dir, exit 1 on hits
+pkgbouncer check lodash react@18 @types/node        # npm by default; exit 1 if any is blocked
+pkgbouncer check pypi:requests==2.31.0 crates:serde@1 go:github.com/gin-gonic/gin@v1.9.1
+pkgbouncer check --ecosystem PyPI requests numpy
+pkgbouncer check --json axios                        # machine-readable verdicts
+pkgbouncer scan ./my-project                         # all lockfiles in the dir, exit 1 on hits
 ```
 
 Lockfiles understood: package-lock.json, npm-shrinkwrap.json, pnpm-lock.yaml, yarn.lock, bun.lock, uv.lock, poetry.lock, requirements.txt (pinned lines only), Cargo.lock, go.sum.
@@ -83,7 +83,7 @@ Lockfiles understood: package-lock.json, npm-shrinkwrap.json, pnpm-lock.yaml, ya
 
 ## Policy
 
-Put `guardian.json` in the project root, or `~/.guardian/policy.json` for a user-wide default. All fields are optional.
+Put `pkgbouncer.json` in the project root, or `~/.pkgbouncer/policy.json` for a user-wide default. All fields are optional.
 
 ```json
 {
@@ -98,15 +98,15 @@ Put `guardian.json` in the project root, or `~/.guardian/policy.json` for a user
 - `allow` entries short-circuit every rule. `deny` entries always block.
 - Entries are `name`, `name@semver-range`, or `@scope/*`.
 
-Environment variables: `GUARDIAN_HOME` (default `~/.guardian`), `GUARDIAN_CACHE_DIR`, `GUARDIAN_OSV_URL`, `GUARDIAN_NPM_REGISTRY`, `GUARDIAN_PYPI_URL`, `GUARDIAN_CRATES_URL`, `GUARDIAN_GOPROXY_URL`.
+Environment variables: `PKGBOUNCER_HOME` (default `~/.pkgbouncer`), `PKGBOUNCER_CACHE_DIR`, `PKGBOUNCER_OSV_URL`, `PKGBOUNCER_NPM_REGISTRY`, `PKGBOUNCER_PYPI_URL`, `PKGBOUNCER_CRATES_URL`, `PKGBOUNCER_GOPROXY_URL`.
 
 ## What it does and does not catch
 
-Guardian is feed-based. It catches what has been reported to [OSV.dev](https://osv.dev) (which ingests the OpenSSF malicious-packages list, the GitHub Advisory Database, PyPA advisories, RustSec, and the Go vulnerability database) and what registry metadata reveals. Most malicious packages are classified within three days of publication, and the `too-new` rule buys you that window. It does not analyze package code and will not catch a brand-new compromise before anyone reports it.
+pkgbouncer is feed-based. It catches what has been reported to [OSV.dev](https://osv.dev) (which ingests the OpenSSF malicious-packages list, the GitHub Advisory Database, PyPA advisories, RustSec, and the Go vulnerability database) and what registry metadata reveals. Most malicious packages are classified within three days of publication, and the `too-new` rule buys you that window. It does not analyze package code and will not catch a brand-new compromise before anyone reports it.
 
-Transitive dependencies are judged after the install, from the lockfile diff, not before. A malicious transitive package will land on disk once and be reported immediately; the agent is told to remove it. Pair Guardian with `--ignore-scripts` (npm 12 does this by default) for defense in depth.
+Transitive dependencies are judged after the install, from the lockfile diff, not before. A malicious transitive package will land on disk once and be reported immediately; the agent is told to remove it. Pair pkgbouncer with `--ignore-scripts` (npm 12 does this by default) for defense in depth.
 
-Results are cached under `~/.guardian/cache` (advisories 1 hour, registry metadata 6 hours, misses 10 minutes). Lookups go to OSV and the registries only; nothing about your project leaves your machine except package names.
+Results are cached under `~/.pkgbouncer/cache` (advisories 1 hour, registry metadata 6 hours, misses 10 minutes). Lookups go to OSV and the registries only; nothing about your project leaves your machine except package names.
 
 ## Exit codes
 
@@ -116,7 +116,7 @@ Results are cached under `~/.guardian/cache` (advisories 1 hour, registry metada
 | `hook claude-code` | allow or warn | | deny (blocks in PreToolUse; reports to the model in PostToolUse) |
 | `hook cursor` | always; verdict is in stdout JSON | | |
 
-If Guardian itself crashes inside a hook it exits 0 so the agent is never wedged by the gate.
+If pkgbouncer itself crashes inside a hook it exits 0 so the agent is never wedged by the gate.
 
 ## Development
 

@@ -42,7 +42,7 @@ interface Result { status: number | null; stdout: string; stderr: string }
 function run(args: string[], input?: string): Promise<Result> {
   return new Promise((resolvePromise) => {
     const child = spawn(process.execPath, [join(process.cwd(), 'dist', 'cli.js'), ...args], {
-      env: { ...process.env, GUARDIAN_OSV_URL: base, GUARDIAN_NPM_REGISTRY: base, GUARDIAN_CACHE_DIR: mkdtempSync(join(tmpdir(), 'gc-')), GUARDIAN_HOME: mkdtempSync(join(tmpdir(), 'gh-')) },
+      env: { ...process.env, PKGBOUNCER_OSV_URL: base, PKGBOUNCER_NPM_REGISTRY: base, PKGBOUNCER_CACHE_DIR: mkdtempSync(join(tmpdir(), 'gc-')), PKGBOUNCER_HOME: mkdtempSync(join(tmpdir(), 'gh-')) },
     });
     let stdout = '';
     let stderr = '';
