@@ -70,7 +70,7 @@ package.json directly. Tool descriptions instruct the agent to call
 | critical-advisory | OSV GHSA with severity CRITICAL/HIGH for name@version | deny (HIGH -> warn) |
 | nonexistent | npm registry 404 | deny (hallucination/slopsquat signal) |
 | too-new | version published < `minAgeDays` (default 3) ago | warn (deny if `strict`) |
-| typosquat | Levenshtein/Damerau distance <= 2 to a top-5000 name and not itself popular | warn |
+| typosquat | Levenshtein/Damerau distance <= 2 to a bundled popular-name list and not itself popular | warn |
 | install-scripts | version has preinstall/install/postinstall | warn |
 
 Policy is read from `guardian.json` at repo root, else `~/.guardian/policy.json`,
