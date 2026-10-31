@@ -1,0 +1,30 @@
+{
+  "name": "guardian-mcp",
+  "version": "0.1.0",
+  "description": "Agent-native dependency install gate: blocks malicious, hallucinated and risky npm packages before Claude Code, Cursor or any AI agent installs them.",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "guardian": "./dist/cli.js" },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "semver": "^7.6.3",
+    "yaml": "^2.6.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/semver": "^7.5.8",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}
