@@ -34,6 +34,8 @@ export interface Verdict {
   action: Action;
   findings: Finding[];
   safeVersion: string | null;
+  /** 'scan' verdicts come from an OSV-only lockfile scan and never compute a safe version. */
+  source?: 'check' | 'scan';
 }
 
 export interface Policy {

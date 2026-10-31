@@ -74,7 +74,7 @@ export async function scanRefs(refs: PackageRef[], sources: Sources = defaultSou
       else if (sev === 'HIGH') findings.push({ rule: 'critical-advisory', action: 'warn', message: `${ref.name}@${ref.spec} has a HIGH severity advisory (${describe(v)}).`, data: { id: v.id, severity: sev } });
     }
     if (findings.length) {
-      out.push({ ref, resolvedVersion: ref.spec, action: findings.some((f) => f.action === 'deny') ? 'deny' : 'warn', findings, safeVersion: null });
+      out.push({ ref, resolvedVersion: ref.spec, action: findings.some((f) => f.action === 'deny') ? 'deny' : 'warn', findings, safeVersion: null, source: 'scan' });
     }
   });
   return out;
