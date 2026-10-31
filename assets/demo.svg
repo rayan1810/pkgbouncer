@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 636" width="1000" height="636" role="img" aria-label="Claude Code is asked to install the typosquat lodahs; pkgbouncer blocks it before it runs and the agent installs lodash instead">
+<style>
+text{font-family:'Cascadia Mono','Cascadia Code',Consolas,Menlo,'SF Mono','DejaVu Sans Mono',monospace;font-size:15px}
+@keyframes v0{0%,1.667%{opacity:0}1.700%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v0{animation:v0 30s linear infinite;opacity:0}
+@keyframes c0{0%{transform:translateX(0)}1.667%{transform:translateX(0);animation-timing-function:steps(67,end)}9.000%,100%{transform:translateX(629.6999999999999px)}}
+.c0{animation:c0 30s linear infinite}
+@keyframes v1{0%,9.333%{opacity:0}9.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v1{animation:v1 30s linear infinite;opacity:0}
+@keyframes c1{0%{transform:translateX(0)}9.333%{transform:translateX(0);animation-timing-function:steps(49,end)}14.667%,100%{transform:translateX(465.9px)}}
+.c1{animation:c1 30s linear infinite}
+@keyframes v2{0%,16.667%{opacity:0}16.700%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v2{animation:v2 30s linear infinite;opacity:0}
+@keyframes v3{0%,19.333%{opacity:0}19.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v3{animation:v3 30s linear infinite;opacity:0}
+@keyframes v4{0%,21.333%{opacity:0}21.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v4{animation:v4 30s linear infinite;opacity:0}
+@keyframes v5{0%,23.333%{opacity:0}23.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v5{animation:v5 30s linear infinite;opacity:0}
+@keyframes v6{0%,23.333%{opacity:0}23.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v6{animation:v6 30s linear infinite;opacity:0}
+@keyframes v7{0%,25.333%{opacity:0}25.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v7{animation:v7 30s linear infinite;opacity:0}
+@keyframes v8{0%,27.333%{opacity:0}27.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v8{animation:v8 30s linear infinite;opacity:0}
+@keyframes v9{0%,34.667%{opacity:0}34.700%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v9{animation:v9 30s linear infinite;opacity:0}
+@keyframes v10{0%,38.000%{opacity:0}38.033%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v10{animation:v10 30s linear infinite;opacity:0}
+@keyframes v11{0%,42.667%{opacity:0}42.700%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v11{animation:v11 30s linear infinite;opacity:0}
+@keyframes c11{0%{transform:translateX(0)}42.667%{transform:translateX(0);animation-timing-function:steps(79,end)}47.667%,100%{transform:translateX(738.9px)}}
+.c11{animation:c11 30s linear infinite}
+@keyframes v12{0%,48.000%{opacity:0}48.033%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v12{animation:v12 30s linear infinite;opacity:0}
+@keyframes c12{0%{transform:translateX(0)}48.000%{transform:translateX(0);animation-timing-function:steps(76,end)}53.000%,100%{transform:translateX(711.6px)}}
+.c12{animation:c12 30s linear infinite}
+@keyframes v13{0%,53.333%{opacity:0}53.367%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v13{animation:v13 30s linear infinite;opacity:0}
+@keyframes c13{0%{transform:translateX(0)}53.333%{transform:translateX(0);animation-timing-function:steps(82,end)}58.333%,100%{transform:translateX(766.1999999999999px)}}
+.c13{animation:c13 30s linear infinite}
+@keyframes v14{0%,58.667%{opacity:0}58.700%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.v14{animation:v14 30s linear infinite;opacity:0}
+@keyframes c14{0%{transform:translateX(0)}58.667%{transform:translateX(0);animation-timing-function:steps(35,end)}61.333%,100%{transform:translateX(338.5px)}}
+.c14{animation:c14 30s linear infinite}
+@keyframes cap{0%,68.333%{opacity:0}71.000%,93.333%{opacity:1}96.667%,100%{opacity:0}}
+.cap{animation:cap 30s linear infinite;opacity:0}
+</style>
+<rect width="1000" height="636" fill="#010409"/>
+<rect x="14" y="14" width="972" height="510" rx="10" fill="#0d1117" stroke="#30363d"/>
+<path d="M14 24a10 10 0 0 1 10-10h952a10 10 0 0 1 10 10v28H14z" fill="#161b22"/>
+<circle cx="38" cy="34" r="6" fill="#ff5f56"/><circle cx="60" cy="34" r="6" fill="#ffbd2e"/><circle cx="82" cy="34" r="6" fill="#27c93f"/>
+<text x="500" y="39" text-anchor="middle" fill="#8b949e" font-size="13">claude · demo-app</text>
+<clipPath id="win"><rect x="15" y="52" width="970" height="471"/></clipPath>
+<g clip-path="url(#win)">
+<g class="v0"><text x="36" y="86" xml:space="preserve"><tspan fill="#d97757" xml:space="preserve">&gt; </tspan><tspan fill="#e6edf3" xml:space="preserve">Add the lodahs package with npm install lodahs. If it is blocked,</tspan></text><rect class="c0" x="34" y="69" width="633.6999999999999" height="25" fill="#0d1117"/></g>
+<g class="v1"><text x="36" y="111" xml:space="preserve"><tspan fill="#e6edf3" xml:space="preserve">  work out what I meant and install that instead.</tspan></text><rect class="c1" x="34" y="94" width="469.9" height="25" fill="#0d1117"/></g>
+<g class="v2"><text x="36" y="151" xml:space="preserve"><tspan fill="#3fb950" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">Bash</tspan><tspan fill="#8b949e" xml:space="preserve">(npm install lodahs)</tspan></text></g>
+<g class="v3"><text x="36" y="176" xml:space="preserve"><tspan fill="#8b949e" xml:space="preserve">  ⎿  hook output:</tspan></text></g>
+<g class="v4"><text x="36" y="201" xml:space="preserve"><tspan fill="#ff7b72" xml:space="preserve">     [pkgbouncer] BLOCKED lodahs@0.0.1-security</tspan></text></g>
+<g class="v5"><text x="36" y="226" xml:space="preserve"><tspan fill="#ff7b72" xml:space="preserve">       - (known-malicious) lodahs@0.0.1-security is a known malicious package</tspan></text></g>
+<g class="v6"><text x="36" y="251" xml:space="preserve"><tspan fill="#ff7b72" xml:space="preserve">         (MAL-2025-25502: Malicious code in lodahs (npm)).</tspan></text></g>
+<g class="v7"><text x="36" y="276" xml:space="preserve"><tspan fill="#d29922" xml:space="preserve">       - (typosquat) lodahs looks like a typo of the popular package "lodash".</tspan></text></g>
+<g class="v8"><text x="36" y="301" xml:space="preserve"><tspan fill="#8b949e" xml:space="preserve">       -&gt; No safe version found; pick a different package.</tspan></text></g>
+<g class="v9"><text x="36" y="341" xml:space="preserve"><tspan fill="#3fb950" xml:space="preserve">● </tspan><tspan fill="#e6edf3" xml:space="preserve">Bash</tspan><tspan fill="#8b949e" xml:space="preserve">(npm install lodash)</tspan></text></g>
+<g class="v10"><text x="36" y="366" xml:space="preserve"><tspan fill="#8b949e" xml:space="preserve">  ⎿  added 1 package</tspan></text></g>
+<g class="v11"><text x="36" y="406" xml:space="preserve"><tspan fill="#e6edf3" xml:space="preserve">The install of lodahs was blocked by the pkgbouncer hook because that name is a</tspan></text><rect class="c11" x="34" y="389" width="742.9" height="25" fill="#0d1117"/></g>
+<g class="v12"><text x="36" y="431" xml:space="preserve"><tspan fill="#e6edf3" xml:space="preserve">known malicious typosquat of lodash (tracked as MAL-2025-25502), and no safe</tspan></text><rect class="c12" x="34" y="414" width="715.6" height="25" fill="#0d1117"/></g>
+<g class="v13"><text x="36" y="456" xml:space="preserve"><tspan fill="#e6edf3" xml:space="preserve">version exists. I installed lodash instead, which added one package to the project</tspan></text><rect class="c13" x="34" y="439" width="770.1999999999999" height="25" fill="#0d1117"/></g>
+<g class="v14"><text x="36" y="481" xml:space="preserve"><tspan fill="#e6edf3" xml:space="preserve">with zero vulnerabilities reported.</tspan></text><rect class="c14" x="34" y="464" width="342.5" height="25" fill="#0d1117"/></g>
+</g>
+<g class="cap">
+<text x="500" y="566" text-anchor="middle" fill="#e6edf3" font-size="22" font-weight="700">pkgbouncer: an install gate for AI coding agents</text>
+<text x="500" y="600" text-anchor="middle" fill="#d97757" font-size="16">npm install -g pkgbouncer &amp;&amp; pkgbouncer install claude-code</text>
+</g>
+</svg>

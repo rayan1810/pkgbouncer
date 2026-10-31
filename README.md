@@ -1,12 +1,44 @@
 <img src="assets/icon.svg" width="64" height="64" alt="">
 
-# pkgbouncer MCP
+# pkgbouncer
+
+[![npm](https://img.shields.io/npm/v/pkgbouncer)](https://www.npmjs.com/package/pkgbouncer)
+[![CI](https://github.com/rayan1810/pkgbouncer/actions/workflows/ci.yml/badge.svg)](https://github.com/rayan1810/pkgbouncer/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/pkgbouncer)](LICENSE)
+[![node](https://img.shields.io/node/v/pkgbouncer)](package.json)
+
+<p align="center">
+  <img src="assets/demo.svg" alt="Claude Code asked to install the typosquat lodahs; pkgbouncer blocks it before it runs" width="760">
+</p>
 
 **An install gate for AI coding agents.** pkgbouncer sits between Claude Code (or any MCP-capable agent) and the package registries. Before a package is installed it checks the name and version against public malware and advisory feeds and blocks the install if the package is known-malicious, does not exist (hallucinated or slopsquatted), or looks like a typo of a popular package. It warns on releases younger than a few days, high-severity advisories, and install scripts. After an install it diffs the lockfile and flags anything risky that came in transitively. When it blocks, it tells the agent which version is safe so the agent can self-correct.
 
 Covers **npm, PyPI, crates.io, and Go**.
 
-Tools like Socket, Aikido Safe Chain, and Dependabot protect a human typing `npm install`. pkgbouncer protects the shell command an agent runs on your behalf.
+pkgbouncer needs no account and no API key. It uses the free public [OSV.dev](https://osv.dev) database and the package registries, and nothing leaves your machine except package names.
+
+## Is it a tool, a hook, or an MCP server?
+
+All three, over one rule engine. They differ in how much they can enforce:
+
+| Form | How it runs | Enforcement |
+|---|---|---|
+| **Hook** | Claude Code calls it automatically before and after every shell command | **Enforced.** The agent cannot skip it. This is the install gate. |
+| **MCP server** | The agent can call it to check a package before editing a manifest | Advisory. The agent decides whether to ask. |
+| **CLI** | You or CI run `pkgbouncer check` and `pkgbouncer scan` | Exit code 1 on a blocked package |
+
+Use the hook for protection and add the MCP server if you want the agent to check proactively.
+
+## How it compares
+
+Several tools guard installs. They differ in where they sit:
+
+- **Socket Firewall, Aikido Safe Chain, and similar wrappers** sit in front of the package manager. They protect a person typing the command, and can cover an agent only if its shell uses the wrapper.
+- **Dependabot, Snyk, and similar scanners** run on a schedule or in CI, after a package is already in your repository.
+- **attach-guard** is a Claude Code plugin that also uses a pre-install hook. It scores packages through Socket.dev and needs a Socket API token.
+- **pkgbouncer** is a Claude Code hook plus an MCP server and CLI that decides locally from public feeds. It covers bare installs and the post-install lockfile diff, and it requires no account.
+
+If you already run one of these, pkgbouncer adds the agent-side gate. They do not conflict.
 
 ## 30-second install
 
@@ -118,13 +150,25 @@ Results are cached under `~/.pkgbouncer/cache` (advisories 1 hour, registry meta
 
 If pkgbouncer itself crashes inside a hook it exits 0 so the agent is never wedged by the gate.
 
-## Development
+## Status
+
+Version 0.1.0, early release. The Claude Code hook has been verified in live Claude Code sessions on Windows. The Cursor hook is written to Cursor's documented format but has not been tested in a live Cursor install. Bug reports and false positives are very welcome.
+
+## Contributing
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, the code map, and the ground rules. Please report vulnerabilities privately as described in [SECURITY.md](SECURITY.md), and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ```bash
+git clone https://github.com/rayan1810/pkgbouncer.git
+cd pkgbouncer
 npm install
-npm test          # vitest, no network needed
 npm run build
+npm test          # vitest, no network needed
 node dist/cli.js check lodash
 ```
 
-Design and plans: `docs/superpowers/specs/` and `docs/superpowers/plans/`.
+Design and plans: `docs/superpowers/specs/` and `docs/superpowers/plans/`. Release history is in [CHANGELOG.md](CHANGELOG.md).
+
+## License
+
+[MIT](LICENSE)
