@@ -68,7 +68,7 @@ export function evaluate(facts: PackageFacts, policy: Policy, now: number = Date
 
   const vf = facts.versions.find((v) => v.version === resolved);
   for (const vuln of facts.vulns) {
-    if (!vulnAffectsVersion(vuln, ref.name, resolved)) continue;
+    if (!vulnAffectsVersion(vuln, ref.name, resolved, ref.ecosystem)) continue;
     if (isMalware(vuln)) {
       findings.push({
         rule: 'known-malicious',
@@ -107,7 +107,7 @@ export function evaluate(facts: PackageFacts, policy: Policy, now: number = Date
     });
   }
 
-  const target = findTyposquatTarget(ref.name);
+  const target = findTyposquatTarget(ref.name, ref.ecosystem);
   if (target) {
     findings.push({
       rule: 'typosquat',

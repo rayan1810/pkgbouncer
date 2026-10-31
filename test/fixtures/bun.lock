@@ -1,0 +1,7 @@
+{
+  "lockfileVersion": 1,
+  "packages": {
+    "lodash": ["lodash@4.17.21", "", {}, "sha512-x"],
+    "@types/node": ["@types/node@22.0.0", "", {}, "sha512-y"],
+  },
+}
