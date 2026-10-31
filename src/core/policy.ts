@@ -60,6 +60,8 @@ export function evaluate(facts: PackageFacts, policy: Policy, now: number = Date
     return done();
   }
   if (!resolved) {
+    // Registry unreachable: we have no version data, so fail open/closed per policy rather than call it nonexistent.
+    if (facts.versions.length === 0 && facts.sourceErrors.length > 0) return done();
     findings.push({ rule: 'nonexistent', action: 'deny', message: `${ref.name}@${ref.spec} matches no published version.` });
     return done();
   }
