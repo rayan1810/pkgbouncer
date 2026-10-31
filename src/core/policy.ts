@@ -21,6 +21,13 @@ export function matchesList(list: string[], name: string, version: string | null
   return false;
 }
 
+const REGISTRY_NAME: Record<PackageFacts['ref']['ecosystem'], string> = {
+  npm: 'the npm registry',
+  PyPI: 'PyPI',
+  'crates.io': 'crates.io',
+  Go: 'the Go module proxy',
+};
+
 function describe(id: string, summary?: string): string {
   return summary ? `${id}: ${summary}` : id;
 }
@@ -52,10 +59,12 @@ export function evaluate(facts: PackageFacts, policy: Policy, now: number = Date
     return { ref, resolvedVersion: resolved, action: 'allow', findings: [], safeVersion: resolved };
   }
   if (!facts.exists) {
+    const lookalike = findTyposquatTarget(ref.name, ref.ecosystem);
     findings.push({
       rule: 'nonexistent',
       action: 'deny',
-      message: `${ref.name} does not exist on the npm registry. It may be a hallucinated name (slopsquatting target). Verify the package name before installing.`,
+      message: `${ref.name} does not exist on ${REGISTRY_NAME[ref.ecosystem]}. It may be a hallucinated name (slopsquatting target).${lookalike ? ` Did you mean "${lookalike}"?` : ' Verify the package name before installing.'}`,
+      data: lookalike ? { lookalike } : undefined,
     });
     return done();
   }
