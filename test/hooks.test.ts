@@ -115,6 +115,10 @@ describe('claudeCodeHook', () => {
     expect((await claudeCodeHook({ tool_name: 'Bash', tool_input: { command: 'npm i fine' } }, P, stubSources, quiet)).exitCode).toBe(0);
     expect((await claudeCodeHook({ tool_name: 'Read', tool_input: {} }, P, stubSources, quiet)).exitCode).toBe(0);
   });
+  it('gates the PowerShell tool too', async () => {
+    const r = await claudeCodeHook({ tool_name: 'PowerShell', tool_input: { command: 'npm install evil; echo done' } }, P, stubSources, quiet);
+    expect(r.exitCode).toBe(2);
+  });
   it('routes PostToolUse to the post-install diff using the hook cwd', async () => {
     const dir = project({}, lockWith({ fine: '1.0.0' }));
     await claudeCodeHook({ hook_event_name: 'PreToolUse', tool_name: 'Bash', tool_input: { command: 'npm i fine' }, cwd: dir }, P, stubSources);

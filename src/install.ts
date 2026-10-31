@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
+import { SHELL_MATCHER } from './hooks/claude-code.js';
 
 export const CLAUDE_HOOK_CMD = 'guardian hook claude-code';
 export const CURSOR_HOOK_CMD = 'guardian hook cursor';
@@ -41,9 +42,10 @@ export function installClaudeCode(home: string = homedir()): string {
   const settings = readJson(p);
   const hooks = objectAt(settings, 'hooks');
   for (const event of ['PreToolUse', 'PostToolUse']) {
-    const list = arrayAt(hooks, event) as { hooks?: { command?: string }[] }[];
-    const present = list.some((entry) => (entry.hooks ?? []).some((h) => h.command === CLAUDE_HOOK_CMD));
-    if (!present) list.push({ matcher: 'Bash', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] } as never);
+    const list = arrayAt(hooks, event) as { matcher?: string; hooks?: { type?: string; command?: string; timeout?: number }[] }[];
+    const ours = list.find((entry) => (entry.hooks ?? []).some((h) => h.command === CLAUDE_HOOK_CMD));
+    if (ours) ours.matcher = SHELL_MATCHER; // upgrade entries written by older versions
+    else list.push({ matcher: SHELL_MATCHER, hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] });
   }
   writeJson(p, settings);
   return p;

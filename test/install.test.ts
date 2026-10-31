@@ -13,9 +13,19 @@ describe('installClaudeCode', () => {
     const s = JSON.parse(readFileSync(p, 'utf8'));
     expect(s.hooks.PreToolUse).toHaveLength(1);
     expect(s.hooks.PostToolUse).toHaveLength(1);
-    const entry = { matcher: 'Bash', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] };
+    const entry = { matcher: 'Bash|PowerShell', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] };
     expect(s.hooks.PreToolUse[0]).toEqual(entry);
     expect(s.hooks.PostToolUse[0]).toEqual(entry);
+  });
+  it('upgrades an older Bash-only entry to cover PowerShell', () => {
+    const home = mkdtempSync(join(tmpdir(), 'gh-'));
+    mkdirSync(join(home, '.claude'));
+    writeFileSync(join(home, '.claude', 'settings.json'), JSON.stringify({ hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: CLAUDE_HOOK_CMD, timeout: 30 }] }] } }));
+    installClaudeCode(home);
+    const s = JSON.parse(readFileSync(join(home, '.claude', 'settings.json'), 'utf8'));
+    expect(s.hooks.PreToolUse).toHaveLength(1);
+    expect(s.hooks.PreToolUse[0].matcher).toBe('Bash|PowerShell');
+    expect(s.hooks.PostToolUse[0].matcher).toBe('Bash|PowerShell');
   });
   it('preserves existing settings and hooks', () => {
     const home = mkdtempSync(join(tmpdir(), 'gh-'));
